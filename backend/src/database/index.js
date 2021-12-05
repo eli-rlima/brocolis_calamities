@@ -7,7 +7,7 @@ class Database {
 
   mongo() {
     this.mongoConnection = mongoose.connect(
-      'mongodb://localhost:27017/raincife',
+      'mongodb://mongo:27017/raincife',
       {
         useNewUrlParser: true,
         useFindAndModify: false,
