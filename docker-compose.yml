@@ -1,0 +1,44 @@
+version: "3.8"
+services:
+  mongo:
+    image: mongo:4.2
+    ports:
+      - 27017:27017
+    volumes:
+      - ./mongodb:/data/db
+    networks:
+      network:
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    command: sh -c "yarn install && yarn start"
+    ports:
+      - 8000:8000
+    working_dir: /backend
+    volumes:
+      - ./backend:/backend
+    depends_on:
+      mongo:
+        condition: service_started
+    networks:
+      network:
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+    command: sh -c "yarn install && yarn start"
+    ports:
+      - 3000:3000
+    working_dir: /frontend
+    volumes:
+      - ./frontend:/frontend
+    depends_on:
+      backend:
+        condition: service_started
+    networks:
+      network:
+
+networks:
+  network:
+    driver: bridge
